@@ -1,3 +1,40 @@
 .track {
-    width: 350px;
+    width: 300px;
+    margin: 45px 25px 39px;
+    cursor: pointer;
+}
+.trackDetails {
+    height: 150px;
+    background: #1d1e1f;
+    position: relative;
+}
+.img-container {
+    height: 300px;
+}
+.artistName {
+    color: #7d7e7f;
+    font-size: 16px;
+    width: 90%;
+    text-align: left;
+    margin: 0px auto;
+    padding-top: 22px;
+}
+.trackName {
+    color: #bdbebf;
+    padding-top: 8px;
+    margin: auto;
+    width: 90%;
+    text-align: left;
+    font-size: 18px;
+}
+.playCount {
+    color: #5d5e5f;
+    padding-top: 8px;
+    margin: auto;
+    width: 90%;
+    text-align: left;
+    font-size: 18px;
+    position: absolute;
+    bottom: 10px;
+    left: 16px;
 }

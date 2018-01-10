@@ -8,7 +8,6 @@ class App extends React.Component {
     return (
       <BrowserRouter>
       <div className="App">
-       <span>Hello, its test page</span>
        <MainPage/>
       </div>
       </BrowserRouter>

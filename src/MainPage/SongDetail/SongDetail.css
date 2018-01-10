@@ -1,0 +1,16 @@
+.songDetail {
+    margin: 100px auto;
+    display: flex;
+    flex-flow: column;
+}
+.songDetail iframe {
+    margin: 30px auto;
+    border: none;
+}
+.songDetail
+.title {
+    color: #d6d6d6;
+    font-size: 30px;
+    margin-bottom: 15px;
+
+}

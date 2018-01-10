@@ -1,12 +1,24 @@
 import * as React from 'react';
+import './SearchBlock.css';
 
 const searchBlock = (props: any) => {
-    
+    let results = <span>Лучшие треки</span>;
+    if (props.searched) {
+        results = <span>{props.searched}</span>;
+    }
     return (
-        <div>
-            <input type="text" placeholder="Search" value={props.value} onChange={props.onChanged}/>
+        <div className="searchBlock">
+            <div className="input-container">
+                <input type="text" placeholder="Поиск треков" value={props.value} onChange={props.onChanged} />
+            </div>
+            <div className="title">
+                <span>Last.fm /</span>
+            </div>
+            <div className="subtitle">
+                {results}
+            </div>
         </div>
     );
-}; 
+};
 
 export default searchBlock;

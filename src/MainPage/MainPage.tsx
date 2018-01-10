@@ -2,42 +2,50 @@ import * as React from 'react';
 import axios from 'axios';
 import * as Rx from 'rxjs';
 import { Switch, Route } from 'react-router-dom';
-// import { withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 
-// import SearchBlock from './SearchBlock/SearchBlock';
-// import TopTracks from './TopTracks/TopTracks';
-// import SongDetail from './SongDetail/SongDetail';
+import './MainPage.css';
+import SearchBlock from './SearchBlock/SearchBlock';
+import TopTracks from './TopTracks/TopTracks';
+import SongDetail from './SongDetail/SongDetail';
+import Track from './Track/Track';
 
 const LAST_FM_APY_KEY = 'c06728309b384d47ffce7566b4e78801';
 const LAST_FM_URL = 'http://ws.audioscrobbler.com';
 const YOUTUBE_API_KEY = 'AIzaSyAPQY0EXQZANMSWHlAaozIKNu7_CWN0DrU';
 const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/search?part=id&q=';
 
-class MainPage extends React.Component {
+class MainPage extends React.Component<any, any> {
     state = {
         topTracks: [],
         foundTracks: [],
         value: '',
         loaded: false,
-        videoId: ''
+        videoId: '',
+        searched: '',
+        query: '',
+        loadedVideos: []
     };
     onSearch$ = new Rx.Subject();
     subscription: any;
 
-   
 
-    constructor (props: any) {
+
+    constructor(props: any) {
         super(props);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.getTopTracks();
         this.subscription = this.onSearch$
-        .debounceTime(700)
-        .distinctUntilChanged()
-        .subscribe(res => {
-            this.findTracks(res);
-        });
+            .debounceTime(700)
+            .distinctUntilChanged()
+            .subscribe(res => {
+                this.findTracks(res);
+                this.setState({
+                    searched: res
+                });
+            });
     }
 
     getTopTracks = () => {
@@ -54,28 +62,31 @@ class MainPage extends React.Component {
     }
 
     findTracks = (q: any) => {
-      
+
         axios.get(LAST_FM_URL + '/2.0/?method=track.search&track=' + q + '&api_key=' + LAST_FM_APY_KEY + '&format=json')
-        .then(res => {
-            this.setState({
-                foundTracks: res.data.results.trackmatches.track,
-                loaded: true
+            .then(res => {
+                this.setState({
+                    foundTracks: res.data.results.trackmatches.track,
+                    loaded: true,
+                    searched: q
+                });
+            })
+            .catch(err => {
+                console.warn(err);
             });
-        })
-        .catch(err => {
-            console.warn(err);
-        });
     }
 
     findYoutubeVideo = (q: any) => {
-        console.warn(q);
+        
         axios.get(YOUTUBE_URL + q + '&type=video&key=' + YOUTUBE_API_KEY)
-            .then(res=> {
+            .then(res => {
                 console.warn(res);
                 this.setState({
-                    videoId: res.data.items[0].id.videoId
+                    loadedVideos: res.data.items,
+                    videoId: res.data.items[0].id.videoId,
+                    query: q
                 });
-                // this.props.history.push('/video/123');
+                this.props.history.push('/video');
             })
             .catch(err => {
                 console.warn(err);
@@ -91,43 +102,52 @@ class MainPage extends React.Component {
         this.setState({
             value: event.target.value
         });
-      this.onSearch$.next(event.target.value);   
-    } 
+        this.onSearch$.next(event.target.value);
+    }
 
     render() {
-        // let tracks: any = <TopTracks topTracks={this.state.topTracks} clicked={this.findYoutubeVideo}/>;
-        // if (this.state.foundTracks && this.state.foundTracks.length > 0 && this.state.value.trim() !== '' && this.state.loaded) {
-        //     tracks = this.state.foundTracks.map((track: any, index) => {
-        //         return <div key={index}>{track.name}</div>;
-        //     });
-        // };
-        
+        let tracks: any = <TopTracks topTracks={this.state.topTracks} clicked={this.findYoutubeVideo} />;
+        if (this.state.foundTracks && this.state.foundTracks.length > 0 && this.state.value.trim() !== '' && this.state.loaded) {
+            tracks = this.state.foundTracks.map((track: any, index) => {
+                return <Track
+                    key={index}
+                    clicked={this.findYoutubeVideo}
+                    artistName={track.artist}
+                    trackName={track.name}
+                    playcount={track.listeners}
+                    img={track.image[3]['#text']} />;
+            });
+        };
+
         return (
             <div>
-    {/* <Route path="/video"  render={() => <SongDetail id={this.state.videoId}/>}/> */}
-    <div>
-    <Switch>
-                    <Route exact path='/albums' render={() => (
-                        <div>
-                            Hello
-                        </div>
-                    )} />
-                    <Route exact path='/' render={() => (
-                        <div>
-                            Hello
-                        </div>
-                    )} />
-                    <Route render={() => <h1>Страница не найдена</h1>} />
-                </Switch>
-    </div>
-    
-                
-                {/* <SearchBlock value={this.state.value}  onChanged={(event: any) => this.inputHandler(event)}/>
-                <span>Its main page now</span>
-                {tracks} */}
+                {/* <Route path="/video"  render={() => <SongDetail id={this.state.videoId}/>}/> */}
+                <div>
+                    <Switch>
+                        <Route exact path='/video' render={() =>
+                            <SongDetail id={this.state.videoId} trackName={this.state.query} allVideos={this.state.loadedVideos} />
+                        } />
+                        <Route exact path='/' render={() => (
+                            <div>
+                                <SearchBlock
+                                    value={this.state.value}
+                                    onChanged={(event: any) => this.inputHandler(event)}
+                                    searched={this.state.searched} />
+                                <div className="tracks">
+                                    {tracks}
+                                </div>
+
+                            </div>
+                        )} />
+                        <Route render={() => <h1>Страница не найдена</h1>} />
+                    </Switch>
+                </div>
+
+
+
             </div>
         );
     }
 }
 
-export default MainPage;
+export default withRouter(MainPage);
