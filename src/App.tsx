@@ -11,7 +11,6 @@ const store = createStore(userstate);
 class App extends React.Component {
   render() {
     return (
-     
         <BrowserRouter>
          <Provider store={store}>
           <div className="App">

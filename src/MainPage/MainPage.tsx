@@ -2,8 +2,9 @@ import * as React from "react";
 import axios from "axios";
 import * as Rx from "rxjs";
 import { Switch, Route } from "react-router-dom";
-import { withRouter } from "react-router";
+import { withRouter, RouteProps } from "react-router";
 import  {connect} from 'react-redux';
+// import {compose} from 'redux';
 
 import "./MainPage.css";
 import SearchBlock from "./SearchBlock/SearchBlock";
@@ -16,7 +17,9 @@ const LAST_FM_URL = "http://ws.audioscrobbler.com";
 const YOUTUBE_API_KEY = "AIzaSyAPQY0EXQZANMSWHlAaozIKNu7_CWN0DrU";
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?part=id&q=";
 
-class MainPage extends React.Component<any & any, any> {
+
+
+class MainPage extends React.Component<any & RouteProps, any> {
   state = {
     user: '',
     topTracks: [],
@@ -119,7 +122,7 @@ class MainPage extends React.Component<any & any, any> {
   };
 
   render() {
-    let tracks: any = (
+    let tracks = (
       <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
     );
     if (
@@ -180,4 +183,4 @@ function mapStateToProps (state: any) {
 }
 
 
-export default withRouter(connect(mapStateToProps)(MainPage));
+export default  withRouter(connect(mapStateToProps)(MainPage));
