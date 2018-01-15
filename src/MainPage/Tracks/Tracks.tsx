@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Track from '../Track/Track';
-import './TopTracks.css';
+import './Tracks.css';
 
-const topTracks = (props: any) => {
+const tracks = (props: any) => {
     let tracks = null;
-    if (props.topTracks) {
-        tracks = props.topTracks.map((track: any, index: any) => {
+    if (props.tracks) {
+        tracks = props.tracks.map((track: any, index: any) => {
             return <Track
                 key={index}
                 clicked={props.clicked}
@@ -18,10 +18,10 @@ const topTracks = (props: any) => {
         });
     }
     return (
-        <div className="toptracks">
+        <div className="Tracks">
             {tracks}
         </div>
     );
 };
 
-export default topTracks;
+export default tracks;
