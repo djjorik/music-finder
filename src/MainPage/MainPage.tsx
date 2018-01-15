@@ -1,11 +1,13 @@
-import * as React from "react";
-import axios from "axios";
-import * as Rx from "rxjs";
-import { Switch, Route } from "react-router-dom";
-import { withRouter, RouteProps } from "react-router";
-import  {connect} from 'react-redux';
-// import {compose} from 'redux';
+import * as React from 'react';
 
+import * as Rx from "rxjs";
+
+import { withRouter, RouteComponentProps  } from 'react-router';
+// RouteProps
+import  { connect } from 'react-redux';
+import axios from "axios";
+// import {compose} from 'redux';
+import { Switch, Route } from "react-router-dom";
 import "./MainPage.css";
 import SearchBlock from "./SearchBlock/SearchBlock";
 import Tracks from "./Tracks/Tracks";
@@ -17,18 +19,25 @@ const LAST_FM_URL = "http://ws.audioscrobbler.com";
 const YOUTUBE_API_KEY = "AIzaSyAPQY0EXQZANMSWHlAaozIKNu7_CWN0DrU";
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?part=id&q=";
 
+type OwnProps = RouteComponentProps<{user: string}>;
 
+const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+             user: state.user
+});
 
-class MainPage extends React.Component<any & RouteProps, any> {
+type PropsType = any & any & OwnProps;
+
+// & RouteProps
+class MainPage extends React.Component<PropsType, any> {
   state = {
     user: '',
     topTracks: [],
     foundTracks: [],
-    value: "",
+    value: '',
     loaded: false,
-    videoId: "",
-    searched: "",
-    query: "",
+    videoId: '',
+    searched: '',
+    query: '',
     loadedVideos: []
   };
   onSearch$ = new Rx.Subject();
@@ -102,7 +111,7 @@ class MainPage extends React.Component<any & RouteProps, any> {
           videoId: res.data.items[0].id.videoId,
           query: q
         });
-        // this.props.history.push("/video");
+        this.props.history.push("/video");
       })
       .catch(err => {
         console.warn(err);
@@ -176,11 +185,11 @@ class MainPage extends React.Component<any & RouteProps, any> {
   }
 }
 
-function mapStateToProps (state: any) {
-  return {
-    user: state.user
-  }
-}
+// function mapStateToProps (state: any) {
+//   return {
+//     user: state.user
+//   };
+// }
 
 
-export default  withRouter(connect(mapStateToProps)(MainPage));
+export default  withRouter(connect<any, any, OwnProps>(mapStateToProps)(MainPage));
