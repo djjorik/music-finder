@@ -2,15 +2,12 @@ import * as React from 'react';
 import './App.css';
 import Routes from './Routes/Routes'
 import { BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import rootReducer from './Reducers/index';
+import configureStore from './Store/configureStore';
 
 
-/* eslint-disable no-underscore-dangle */
-const store = createStore(rootReducer,
-   window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()); 
-/* eslint-enable */
+const devTools =  window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']();
+const store  = configureStore(devTools);
 
 class App extends React.Component {
   render() {
