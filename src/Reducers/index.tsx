@@ -11,7 +11,7 @@ const initialState = {
   query: ""
 };
 
-export default function globalState(state: any = initialState, action: any) {
+ const globalState = (state: any = initialState, action: any)  => {
   switch (action.type) {
     case actionType.TOPTRACKS:
       return { ...state, topTracks: action.payload };
@@ -35,3 +35,5 @@ export default function globalState(state: any = initialState, action: any) {
       return state;
   }
 }
+
+export default globalState;

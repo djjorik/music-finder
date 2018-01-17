@@ -5,10 +5,16 @@ import Routes from './Routes/Routes'
 import { BrowserRouter } from 'react-router-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import userstate from './Reducers';
+import globalState from './Reducers/index';
 
-const store = createStore(userstate); 
 
+
+
+/* eslint-disable no-underscore-dangle */
+const store = createStore(globalState,
+   window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()); 
+/* eslint-enable */
+console.log(store);
 class App extends React.Component {
   render() {
     return (

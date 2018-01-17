@@ -32,8 +32,8 @@ const mapStateToProps = (state: any, ownProps: OwnProps) => ({
 const mapDispatchToProps = (dispatch: any)  => {
   return {
     loadTopTracks: action.loadTopTracks,
-    findTracks:action.findTracks,
-    loadSearced:action.loadSearched,
+    findTracks: (payload:any) => dispatch(action.findTracks(payload)),
+    loadSearced: (payload:any) => dispatch(action.loadSearched(payload)),
     findYoutubeVideo:action.findYoutubeVideo
   }
 }
@@ -68,9 +68,10 @@ class MainPage extends React.Component<PropsType, any> {
       .distinctUntilChanged()
       .subscribe(res => {
         this.findTracks(res);
-        this.setState({
-          searched: res
-        });
+        // this.setState({
+        //   searched: res
+        // });
+        this.props.loadSearced(res);
       });
   }
 
@@ -145,6 +146,7 @@ class MainPage extends React.Component<PropsType, any> {
   };
 
   render() {
+    console.log("searched: " + this.props.searched);
     let tracks = (
       <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
     );
