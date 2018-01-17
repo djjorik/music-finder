@@ -1,7 +1,22 @@
 const initialState = {
-  user: 'Unknown User'
+    topTracks: [],
+    foundTracks: [],
+    loadedVideos: [],
+    value: "",
+    loaded: false,
+    videoId: "",
+    searched: "",
+    query: ""
 };
 
-export default function userstate(state: any = initialState) {
-  return state;
+export default function userstate(state: any = initialState, action:any) {
+  switch (action.type) {
+    case "" : 
+
+
+
+    default:
+      return state; 
+  }
+  
 }   

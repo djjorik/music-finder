@@ -1,17 +1,18 @@
 import * as React from 'react';
 
-import * as Rx from "rxjs";
+import * as Rx from 'rxjs';
 
-import { withRouter, RouteComponentProps  } from 'react-router';
+import { withRouter, RouteComponentProps } from "react-router";
 // RouteProps
-import  { connect } from 'react-redux';
+import { connect } from "react-redux";
 import axios from "axios";
 // import {compose} from 'redux';
-import { Switch, Route } from "react-router-dom";
-import "./MainPage.css";
-import SearchBlock from "./SearchBlock/SearchBlock";
-import Tracks from "./Tracks/Tracks";
-import SongDetail from "./SongDetail/SongDetail";
+// import { Switch, Route } from "react-router-dom";
+import './MainPage.css';
+// import SearchBlock from "./SearchBlock/SearchBlock";
+// import Tracks from "./Tracks/Tracks";
+// import SongDetail from "./SongDetail/SongDetail";
+// import TrackWrapper from "./TracksWrapper/TrackWrapper";
 // import Track from './Track/Track';
 
 const LAST_FM_APY_KEY = "c06728309b384d47ffce7566b4e78801";
@@ -19,26 +20,31 @@ const LAST_FM_URL = "http://ws.audioscrobbler.com";
 const YOUTUBE_API_KEY = "AIzaSyAPQY0EXQZANMSWHlAaozIKNu7_CWN0DrU";
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?part=id&q=";
 
-type OwnProps = RouteComponentProps<{user: string}>;
+type OwnProps = RouteComponentProps<{ user: string }>;
 
 const mapStateToProps = (state: any, ownProps: OwnProps) => ({
-             user: state.user
+  user: state.user
 });
+const mapDispatchToProps = (dispatch)  => {
+  return {
+    pageActions: bindActionCreators(pageActions, dispatch)
+  }
+}
 
 type PropsType = any & any & OwnProps;
 
 // & RouteProps
 class MainPage extends React.Component<PropsType, any> {
   state = {
-    user: '',
     topTracks: [],
     foundTracks: [],
-    value: '',
+    loadedVideos: [],
+    value: "",
     loaded: false,
-    videoId: '',
-    searched: '',
-    query: '',
-    loadedVideos: []
+    videoId: "",
+    searched: "",
+    query: ""
+    
   };
   onSearch$ = new Rx.Subject();
   subscription: any;
@@ -131,27 +137,48 @@ class MainPage extends React.Component<PropsType, any> {
   };
 
   render() {
-    let tracks = (
-      <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
-    );
-    if (
-      this.state.foundTracks &&
-      this.state.foundTracks.length > 0 &&
-      this.state.value.trim() !== "" &&
-      this.state.loaded
-    ) {
-      tracks = (
-        <Tracks
-          tracks={this.state.foundTracks}
-          clicked={this.findYoutubeVideo}
-        />
-      );
-    }
+    // let tracks = (
+    //   <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
+    // );
+    // if (
+    //   this.state.foundTracks &&
+    //   this.state.foundTracks.length > 0 &&
+    //   this.state.value.trim() !== "" &&
+    //   this.state.loaded
+    // ) {
+    //   tracks = (
+    //     <Tracks
+    //       tracks={this.state.foundTracks}
+    //       clicked={this.findYoutubeVideo}
+    //     />
+    //   );
+    // }
 
     return (
       <div>
         <div>
-          <Switch>
+          {/* <SongDetail
+            id={this.state.videoId}
+            trackName={this.state.query}
+            allVideos={this.state.loadedVideos}
+            tracks={this.state.foundTracks}
+            clicked={this.findYoutubeVideo}
+            loaded={this.state.loaded}
+          />
+          <TrackWrapper
+            value={this.state.value}
+            onChanged={(event: any) => this.inputHandler(event)}
+            searched={this.state.searched} />*/}
+          
+          {/* <div>
+            <SearchBlock
+              value={this.state.value}
+              onChanged={(event: any) => this.inputHandler(event)}
+              searched={this.state.searched}
+            />
+            <div className="tracks">{tracks}</div>
+          </div> */}
+          {/* <Switch>
             <Route
               exact
               path="/video"
@@ -178,18 +205,13 @@ class MainPage extends React.Component<PropsType, any> {
               )}
             />
             <Route render={() => <h1>Страница не найдена</h1>} />
-          </Switch>
+          </Switch> */}
         </div>
       </div>
     );
   }
 }
 
-// function mapStateToProps (state: any) {
-//   return {
-//     user: state.user
-//   };
-// }
-
-
-export default  withRouter(connect<any, any, OwnProps>(mapStateToProps)(MainPage));
+export default withRouter(
+  connect<any, any, OwnProps>(mapStateToProps, mapDispatchToProps)(MainPage)
+);
