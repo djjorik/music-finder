@@ -1,4 +1,4 @@
-import * as actionType from "../Constants/Constants";
+import * as actionType from "../Constants/ActionTypes";
 
 export function loadTopTracks(payload: any) {
   return {

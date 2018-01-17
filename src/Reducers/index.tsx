@@ -1,4 +1,4 @@
-import * as actionType from "../Constants/Constants";
+import * as actionType from "../Constants/ActionTypes";
 
 const initialState = {
   topTracks: [],
