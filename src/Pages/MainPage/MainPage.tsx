@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import * as action from '../../Actions/Actions'
 import * as Rx from 'rxjs';
 
 import { withRouter, RouteComponentProps } from "react-router";
@@ -23,11 +23,21 @@ const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?part=id&q=";
 type OwnProps = RouteComponentProps<{ user: string }>;
 
 const mapStateToProps = (state: any, ownProps: OwnProps) => ({
-  user: state.user
+  topTracks: state.topTracks,
+  foundTracks: state.foundTracks,
+  loadedVideos: state.loadedVideos,
+  value: state.value,
+  loaded: state.loaded,
+  videoId: state.videoId,
+  searched: state.searched,
+  query: state.query
 });
-const mapDispatchToProps = (dispatch)  => {
+const mapDispatchToProps = (dispatch: any)  => {
   return {
-    pageActions: bindActionCreators(pageActions, dispatch)
+    loadTopTracks: action.loadTopTracks,
+    findTracks:action.findTracks,
+    loadSearced:action.loadSearched,
+    findYoutubeVideo:action.findYoutubeVideo
   }
 }
 
@@ -55,6 +65,7 @@ class MainPage extends React.Component<PropsType, any> {
 
   componentDidMount() {
     this.getTopTracks();
+  
     this.subscription = this.onSearch$
       .debounceTime(700)
       .distinctUntilChanged()
