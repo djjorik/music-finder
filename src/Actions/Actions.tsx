@@ -1,29 +1,24 @@
 import * as actionType from "../Constants/ActionTypes";
 
-export function loadTopTracks(payload: any) {
+export function queryYoutube(payload: any) {
   return {
-    type: actionType.TOPTRACKS,
+    type: actionType.QUERYYOUTUBE,
+    payload
+  };
+}
+export function loadedVideo(payload: any) {
+  return {
+    type: actionType.LOADEDVIDEO,
+    payload
+  };
+}
+export function videoId(payload: any) {
+  return {
+    type: actionType.VIDEOID,
     payload
   };
 }
 
-export function loadSearched(payload: any) {
-  return {
-    type: actionType.SEARCHED,
-    payload
-  };
-}
 
-export function findTracks(payload: any) {
-  return {
-    type: actionType.FINDTRACKS,
-    payload
-  };
-}
 
-export function findYoutubeVideo(payload: any) {
-  return {
-    type: actionType.FINDYOUTUBEVIDEO,
-    payload
-  };
-}
+

@@ -11,41 +11,32 @@ import SearchBlock from "../../Components/SearchBlock/SearchBlock";
 import Tracks from "../../Components/Tracks/Tracks";
 
 
-type OwnProps = RouteComponentProps<{ user: string }>;
+type OwnProps = RouteComponentProps<any>;
+type PropsType = any & any & OwnProps;
 
 const mapStateToProps = (state: any, ownProps: OwnProps) => ({
-  topTracks: state.topTracks,
-  foundTracks: state.foundTracks,
   loadedVideos: state.loadedVideos,
-  value: state.value,
-  loaded: state.loaded,
-  videoId: state.videoId,
-  searched: state.searched,
-  query: state.query
+  videoId: state.videoId, 
+  queryYoutube: state.queryYoutube
 });
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    loadTopTracks: (payload: any) => dispatch(action.loadTopTracks(payload)),
-    findTracks: (payload: any) => dispatch(action.findTracks(payload)),
-    loadSearced: (payload: any) => dispatch(action.loadSearched(payload)),
-    findYoutubeVideo: (payload: any) => dispatch(action.findYoutubeVideo(payload))
+    findYoutubeVideo: (payload: any) => {
+      dispatch(action.queryYoutube(payload.queryYoutube));
+      dispatch(action.loadedVideo(payload.loadedVideos));
+      dispatch(action.videoId(payload.videoId));
+    }
   }
 }
 
-type PropsType = any & any & OwnProps;
-
-// & RouteProps
 class MainPage extends React.Component<PropsType, any> {
   state = {
     topTracks: [],
     foundTracks: [],
-    loadedVideos: [],
-    value: "",
+    inputValue: "",
     loaded: false,
-    videoId: "",
-    searched: "",
-    query: ""
-
+    searchedTitle: ""
   };
   onSearch$ = new Rx.Subject();
   subscription: any;
@@ -62,7 +53,9 @@ class MainPage extends React.Component<PropsType, any> {
       .distinctUntilChanged()
       .subscribe(res => {
         this.findTracks(res);
-        this.props.loadSearced(res);
+        this.setState({
+          searchedTitle: res
+        })
       });
   }
 
@@ -99,7 +92,7 @@ class MainPage extends React.Component<PropsType, any> {
         this.setState({
           foundTracks: res.data.results.trackmatches.track,
           loaded: true,
-          searched: q
+          searchedTitle: q
         });
       })
       .catch(err => {
@@ -112,11 +105,14 @@ class MainPage extends React.Component<PropsType, any> {
       .get(urlConstants.YOUTUBE_URL + q + "&type=video&key=" + urlConstants.YOUTUBE_API_KEY)
       .then(res => {
         console.warn(res);
-        this.setState({
+
+        const youtubeLoad = {
           loadedVideos: res.data.items,
           videoId: res.data.items[0].id.videoId,
-          query: q
-        });
+          queryYoutube: q
+        };
+        this.props.findYoutubeVideo(youtubeLoad)
+
         this.props.history.push("/video");
       })
       .catch(err => {
@@ -125,26 +121,25 @@ class MainPage extends React.Component<PropsType, any> {
   };
 
   inputHandler = (event: any) => {
-    if (this.state.value.trim() === "") {
+    if (this.state.inputValue.trim() === "") {
       this.setState({
         loaded: false
       });
     }
     this.setState({
-      value: event.target.value
+      inputValue: event.target.value
     });
     this.onSearch$.next(event.target.value);
   };
 
   render() {
-    console.log("searched: " + this.props.searched);
     let tracks = (
       <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
     );
     if (
       this.state.foundTracks &&
       this.state.foundTracks.length > 0 &&
-      this.state.value.trim() !== "" &&
+      this.state.inputValue.trim() !== "" &&
       this.state.loaded
     ) {
       tracks = (
@@ -159,9 +154,9 @@ class MainPage extends React.Component<PropsType, any> {
       <div>
         <div>
           <SearchBlock
-            value={this.state.value}
+            value={this.state.inputValue}
             onChanged={(event: any) => this.inputHandler(event)}
-            searched={this.state.searched}
+            searchedTitle={this.state.searchedTitle}
           />
           <div className="tracks">{tracks}</div>
         </div>

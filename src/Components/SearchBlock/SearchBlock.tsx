@@ -3,8 +3,8 @@ import './SearchBlock.css';
 
 const searchBlock = (props: any) => {
     let results = <span>Лучшие треки</span>;
-    if (props.searched) {
-        results = <span>{props.searched}</span>;
+    if (props.searchedTitle) {
+        results = <span>{props.searchedTitle}</span>;
     }
     return (
         <div className="searchBlock">
