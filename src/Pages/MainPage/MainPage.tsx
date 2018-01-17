@@ -3,14 +3,11 @@ import * as action from '../../Actions/Actions'
 import * as Rx from 'rxjs';
 
 import { withRouter, RouteComponentProps } from "react-router";
-// RouteProps
 import { connect } from "react-redux";
 import axios from "axios";
-// import {compose} from 'redux';
-// import { Switch, Route } from "react-router-dom";
 import './MainPage.css';
-// import SearchBlock from "./SearchBlock/SearchBlock";
-// import Tracks from "./Tracks/Tracks";
+import SearchBlock from "../../Components/SearchBlock/SearchBlock";
+import Tracks from "../../Components/Tracks/Tracks";
 // import SongDetail from "./SongDetail/SongDetail";
 // import TrackWrapper from "./TracksWrapper/TrackWrapper";
 // import Track from './Track/Track';
@@ -148,26 +145,32 @@ class MainPage extends React.Component<PropsType, any> {
   };
 
   render() {
-    // let tracks = (
-    //   <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
-    // );
-    // if (
-    //   this.state.foundTracks &&
-    //   this.state.foundTracks.length > 0 &&
-    //   this.state.value.trim() !== "" &&
-    //   this.state.loaded
-    // ) {
-    //   tracks = (
-    //     <Tracks
-    //       tracks={this.state.foundTracks}
-    //       clicked={this.findYoutubeVideo}
-    //     />
-    //   );
-    // }
+    let tracks = (
+      <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
+    );
+    if (
+      this.state.foundTracks &&
+      this.state.foundTracks.length > 0 &&
+      this.state.value.trim() !== "" &&
+      this.state.loaded
+    ) {
+      tracks = (
+        <Tracks
+          tracks={this.state.foundTracks}
+          clicked={this.findYoutubeVideo}
+        />
+      );
+    }
 
     return (
       <div>
         <div>
+           <SearchBlock
+                    value={this.state.value}
+                    onChanged={(event: any) => this.inputHandler(event)}
+                    searched={this.state.searched}
+                  />
+                  <div className="tracks">{tracks}</div>
           {/* <SongDetail
             id={this.state.videoId}
             trackName={this.state.query}

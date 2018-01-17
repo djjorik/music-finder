@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.css';
-import MainPage from './MainPage/MainPage';
-// import Routes from './Routes/Routes'
+// import MainPage from './MainPage/MainPage';
+import Routes from './Routes/Routes'
 import { BrowserRouter } from 'react-router-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -15,8 +15,8 @@ class App extends React.Component {
         <BrowserRouter>
          <Provider store={store}>
           <div className="App">
-            {/* <Routes /> */}
-             <MainPage /> 
+             <Routes /> 
+             {/* <MainPage />  */}
           </div>
           </Provider>
         </BrowserRouter>
