@@ -1,0 +1,11 @@
+{
+    "extends": "@atomix/eslint-config",
+    "parser": "babel-eslint",
+    "rules": {
+        "linebreak-style": 0,
+        "indent": [true, "spaces", 4]
+    },
+    "parserOptions": {
+      "ecmaVersion": 2017
+    }
+  }

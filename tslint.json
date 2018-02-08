@@ -1,1 +1,16 @@
-{}
+{
+  "extends": "tslint-config-airbnb",
+  "linterOptions": {
+    "exclude": [
+      "bin",
+      "src/registerServiceWorker.ts"
+    ]
+  },
+  "jsRules": {},
+  "rules": {
+    "ter-indent": [
+      false
+    ]
+  },
+  "rulesDirectory": []
+}

@@ -14,7 +14,7 @@ const tracks = (props: any) => {
                 trackName={track.name}
                 playcount={track.playcount}
                 img={track.image[3]['#text']}
-            />
+            />;
         });
     }
     return (

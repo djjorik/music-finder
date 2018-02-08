@@ -1,9 +1,9 @@
-import * as actionType from "../Constants/ActionTypes";
+import * as actionType from '../Constants/ActionTypes';
 
 const initialState = {
   loadedVideos: [],
-  videoId: "",
-  queryYoutube: ""
+  videoId: '',
+  queryYoutube: '',
 };
 
 const rootReducer = (state: any = initialState, action: any) => {
@@ -17,6 +17,6 @@ const rootReducer = (state: any = initialState, action: any) => {
     default:
       return state;
   }
-}
+};
 
 export default rootReducer;

@@ -1,0 +1,9 @@
+.UserPanel {
+    display: flex;
+    flex-flow: row;
+    color: white;
+
+}
+.Dialog {
+    background: #262728;
+}

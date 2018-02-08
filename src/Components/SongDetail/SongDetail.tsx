@@ -15,8 +15,8 @@ const songDetail = (props: any) => {
             allowFullScreen={true}
             src={SRC_URL + video.id.videoId}
             width="700"
-            height="350" />
-        })
+            height="350" />;
+        });
     }
 
     return (

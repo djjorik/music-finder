@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Route, Switch } from "react-router";
+import  { Route, Switch } from 'react-router';
 import MainPage from '../Pages/MainPage/MainPage';
 import YoutubePage from '../Pages/YoutubePage/YoutubePage';
 

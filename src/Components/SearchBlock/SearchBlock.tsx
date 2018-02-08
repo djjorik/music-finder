@@ -9,7 +9,8 @@ const searchBlock = (props: any) => {
     return (
         <div className="searchBlock">
             <div className="input-container">
-                <input type="text" placeholder="Поиск треков" value={props.value} onChange={props.onChanged} />
+                <input type="text" placeholder="Поиск треков"
+                    value={props.value} onChange={props.onChanged} />
             </div>
             <div className="title">
                 <span>Last.fm /</span>
