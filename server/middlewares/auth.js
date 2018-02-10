@@ -31,7 +31,9 @@ passport.use(new JwtStrategy(jwtOptions, function (payload, done) {
         if (err) {
             return done(err)
         }
-        if (!user) done({ error: 'User not found' });
+        if (!user) {
+            done({ error: 'User not found' })
+        };
         if (user) {
             done(null, user)
         } else {

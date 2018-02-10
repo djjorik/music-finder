@@ -24,8 +24,6 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     findYoutubeVideo: (payload: any) => {
       dispatch(action.findYoutubeVideo(payload));
-      // dispatch(action.loadedVideo(payload.loadedVideos));
-      // dispatch(action.videoId(payload.videoId));
     },
   };
 };
@@ -101,22 +99,7 @@ class MainPage extends React.Component<PropsType, any> {
   }
 
   findYoutubeVideo = (q: any) => {
-    // axios
-    //   .get(urlConstants.YOUTUBE_URL + q + '&type=video&key=' + urlConstants.YOUTUBE_API_KEY)
-    //   .then(res => {
-    //     console.warn(res);
-
-    //     const youtubeLoad = {
-    //       loadedVideos: res.data.items,
-    //       videoId: res.data.items[0].id.videoId,
-    //       queryYoutube: q
-    //     };
         this.props.findYoutubeVideo(q);
-        // this.props.history.push('/video');
-      // })
-      // .catch(err => {
-      //   console.warn(err);
-      // });
   }
 
   inputHandler = (event: any) => {
@@ -131,9 +114,33 @@ class MainPage extends React.Component<PropsType, any> {
     this.onSearch$.next(event.target.value);
   }
 
+  addTrackToPlaylist(artistName: string, trackName: string) {
+    const payload = {
+      username: '123',
+      songname: trackName,
+      artistname: artistName,
+    };
+    console.log(payload);
+    let token = localStorage.getItem('my-token');
+    if (token == null) {
+      token = '';
+    }
+    const headers = {
+      Authorization: token,
+    };
+    axios.post('http://localhost:8000/add-track', payload,  { headers })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     let tracks = (
-      <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo} />
+      <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo}
+      addTrackToPlaylist={this.addTrackToPlaylist} />
     );
     if (
       // this.state.foundTracks &&
@@ -145,6 +152,7 @@ class MainPage extends React.Component<PropsType, any> {
         <Tracks
           tracks={this.state.foundTracks}
           clicked={this.findYoutubeVideo}
+          addTrackToPlaylist={this.addTrackToPlaylist}
         />
       );
     }

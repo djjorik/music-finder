@@ -9,7 +9,8 @@ const tracks = (props: any) => {
             return <Track
                 key={index}
                 clicked={props.clicked}
-                artistName={track.artist.name}
+                addTrackToPlaylist={props.addTrackToPlaylist}
+                artistName={track.artist.name ? track.artist.name : track.artist}
                 listeners={track.listeners}
                 trackName={track.name}
                 playcount={track.playcount}

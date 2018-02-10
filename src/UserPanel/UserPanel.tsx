@@ -5,7 +5,8 @@ import axios from 'axios';
 import FlatButton from 'material-ui/FlatButton';
 import Login from './components/Login';
 import Register from './components/Register';
-
+import { Link } from 'react-router-dom';
+import history from '../Routes/history';
 
 const api = 'http://localhost:8000';
 
@@ -20,6 +21,17 @@ class UserPanel extends React.Component<any, any> {
         registerResult: '',
         openRegister: false,
     };
+    componentDidMount() {
+        history.listen((location) => {
+            console.log(location.pathname);
+            console.log(history.location.pathname);
+            // if (location.pathname !== history.location.pathname) {
+                console.log('WTF SYKA');
+                history.location.pathname = location.pathname;
+                this.forceUpdate();
+            // }
+        });
+    }
     handleOpenLogin = () => {
         this.setState({
             openLogin: true,
@@ -64,8 +76,8 @@ class UserPanel extends React.Component<any, any> {
                 this.setState({
                     isRegistered: true,
                     registerResult: res.data.status,
-                });            
-            setTimeout(() => {this.handleCloseRegister();}, 2000);
+                });
+                setTimeout(() => { this.handleCloseRegister(); }, 2000);
 
             })
             .catch((err) => {
@@ -79,8 +91,10 @@ class UserPanel extends React.Component<any, any> {
             password: this.state.password,
         })
             .then((res) => {
-                localStorage.setItem('my-token', res.data.token);
-                setTimeout(() => {this.handleCloseLogin();}, 2000);
+                const token = 'Bearer' + res.data.token.slice(3);
+                localStorage.setItem('my-token', token);
+                console.log(localStorage.getItem('my-token'));
+                setTimeout(() => { this.handleCloseLogin(); }, 2000);
                 console.log(res);
             })
             .catch((err) => {
@@ -100,8 +114,33 @@ class UserPanel extends React.Component<any, any> {
         });
     }
 
-    render() {
 
+
+    render() {
+        let navButton = null;
+        if (history.location.pathname !== '/playlist') {
+            navButton = <div className="playlist">
+                <Link to="/playlist">
+                    <FlatButton
+                        label="My playlist"
+                        style={{
+                            color: '#d6d6d6',
+                        }}
+                    />
+                </Link>
+            </div>;
+        } else {
+            navButton = <div className="playlist">
+                <Link to="/">
+                    <FlatButton
+                        label="Home"
+                        style={{
+                            color: '#d6d6d6',
+                        }}
+                    />
+                </Link>
+            </div>;
+        }
         return (
             <div className="UserPanel">
                 <div className="login">
@@ -122,9 +161,17 @@ class UserPanel extends React.Component<any, any> {
                         onClick={this.handleOpenRegister}
                     />
                 </div>
-                <div className="profile">
-                    <span>My profile</span>
-                </div>
+                {/* <div className="playlist">
+                    <Link to="/playlist">
+                        <FlatButton
+                            label="My playlist"
+                            style={{
+                                color: '#d6d6d6',
+                            }}
+                        />
+                    </Link>
+                </div> */}
+                {navButton}
                 <Login handleCloseLogin={this.handleCloseLogin} loginUser={this.loginUser}
                     openLogin={this.state.openLogin}
                     name={this.state.name} password={this.state.password}

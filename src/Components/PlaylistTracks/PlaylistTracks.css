@@ -1,0 +1,69 @@
+.PlaylistTracks {
+    color: white;
+    display: flex;
+    margin: auto;
+    padding-top: 40px;
+}
+.table {
+    display: flex;
+    flex-flow: column;
+    margin: auto;   
+    max-height: 500px;
+    overflow: auto;
+}
+.table-head {
+    display: flex;
+    flex-flow: row;
+    /* position: fixed; */
+    background: #1d1e1f;
+    height: 30px;
+    min-height: 30px;
+    line-height: 30px;
+    border-top: 2px solid #947d7d;
+    border-bottom: 2px solid #947d7d;
+}
+.table-content {
+    display: flex;
+    flex-flow: column;
+    /* padding-top: 34px; */
+}
+.table-content
+.row {
+    display: flex;
+    flex-flow: row;
+    height: 30px;
+    min-height: 30px;   
+    line-height: 30px;
+}
+.table-content
+.row{
+    border-bottom: 2px solid #947d7d;
+}
+.column-1 {
+    width: 250px;
+    min-width: 250px;
+    border-right: 2px solid #947d7d;
+    border-left: 2px solid #947d7d;
+}
+.column-2 {
+    width: 250px;
+    min-width: 250px;
+    border-right: 2px solid #947d7d;
+}
+.column-3 {
+    width: 150px;
+    min-width: 150px;
+    border-right: 2px solid #947d7d;
+}
+.column-4{
+    width: 150px;
+    min-width: 150px;
+    border-right: 2px solid #947d7d;
+}
+
+.table-content
+.column-3 span,
+.table-content
+.column-4 span {
+    cursor: pointer;
+}

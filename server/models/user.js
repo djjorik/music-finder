@@ -9,8 +9,8 @@ const user = mongoose.Schema({
     unique: true,
 },
   passwordHash: String,
-
 })
+
 const saltRounds = 10
 
 user.virtual('password')
