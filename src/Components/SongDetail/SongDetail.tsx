@@ -1,14 +1,20 @@
 import * as React from 'react';
 import './SongDetail.css';
 
-const songDetail = (props: any) => {
+interface ISongDetail {
+    trackName: String;
+    allVideos: any[];
+    id?: String;
+}
+
+const songDetail = (props: ISongDetail) => {
     const SRC_URL = 'https://www.youtube.com/embed/';
     let trackName = null;
-    if (props.trackName) {
+    if (props.trackName !== '') {
         trackName = props.trackName;
     }
     let videos = null;
-    if (props.allVideos) {
+    if (props.allVideos.length > 0) {
         videos = props.allVideos.map((video: any, index: number) => {
             return <iframe title="video_yt"
             key={index}

@@ -1,7 +1,11 @@
 import * as React from 'react';
 import './Notification.css';
 
-const notification = (props: any) => {
+interface INotification {
+    notify: String;
+}
+
+const notification = (props: INotification) => {
     let notify = <div className="notification hidden"></div>;
     if (props.notify !== '') {
         notify = <div className="notification" >

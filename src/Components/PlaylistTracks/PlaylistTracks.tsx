@@ -1,7 +1,13 @@
 import * as React from 'react';
 import './PlaylistTracks.css';
 
-const playlistTracks = (props: any) => {
+interface IPlaylistTracks {
+    tracks: Object[];
+    findYoutubeVideo: any;
+    deleteTrack:any;
+}
+
+const playlistTracks = (props: IPlaylistTracks) => {
     let tracks = null;
     if (props.tracks.length > 0) {
         tracks = props.tracks.map((track: any, index: any) => {

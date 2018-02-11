@@ -1,10 +1,17 @@
 import * as React from 'react';
-import Track from '../Track/Track';
+import Track, { ITrack } from '../Track/Track';
 import './Tracks.css';
 
-const tracks = (props: any) => {
+interface ITracks {
+    tracks: ITrack[];
+    clicked: any;
+    isAuth: boolean;
+    addTrackToPlaylist: any;
+}
+
+const tracks = (props: ITracks) => {
     let tracks = null;
-    if (props.tracks) {
+    if (props.tracks.length > 0) {
         tracks = props.tracks.map((track: any, index: any) => {
             return <Track
                 key={index}

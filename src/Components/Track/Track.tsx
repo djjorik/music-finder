@@ -1,9 +1,20 @@
 import * as React from 'react';
 import './Track.css';
 
-const track = (props: any) => {
+export interface ITrack {
+    isAuth: boolean;
+    addTrackToPlaylist: any;
+    artistName: String;
+    trackName: String;
+    img: any;
+    clicked: any;
+    playcount: String;
+    listeners?:any;
+}
+
+const track = (props: ITrack) => {
     let buttonAdd = null;
-    if (props.isAuth === true) {
+    if (props.isAuth) {
         buttonAdd = <button className="add"
         onClick={() =>
             props.addTrackToPlaylist(props.artistName, props.trackName)}></button>;

@@ -6,8 +6,12 @@ import * as urlConstants from '../../Constants/UrlConstants';
 import YoutubeBlock from '../../Components/YoutubeBlock/YoutubeBlock';
 const api = 'http://localhost:8000';
 
+interface IPlaylist {
+    tracks: any[];
+    videos: String;
+}
 
-class Playlist extends React.Component<any, any> {
+class Playlist extends React.Component<any, IPlaylist> {
     state = {
         tracks: [],
         videos: '',
@@ -90,9 +94,7 @@ class Playlist extends React.Component<any, any> {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => ({
-    loadedVideos: state.loadedVideos,
-    videoId: state.videoId,
-    queryYoutube: state.queryYoutube,
+    isAuth: state.isAuth,
 });
 
 export default connect(mapStateToProps)(Playlist);
