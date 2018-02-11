@@ -22,6 +22,13 @@ export function videoId(payload: any) {
   };
 }
 
+export function isAuth(payload: any) {
+  return {
+    payload,
+    type: actionType.ISAUTH,
+  };
+}
+
 export function findYoutubeVideo(q: any) {
   return (dispatch: any) => {
     axios

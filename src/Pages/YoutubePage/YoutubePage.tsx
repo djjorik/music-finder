@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 class YoutubePage extends React.Component<any, any> {
   render() {
-    console.log(this.props);
     return (
       <div>
        <SongDetail

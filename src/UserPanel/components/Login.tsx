@@ -22,27 +22,20 @@ const login = (props: any) => {
         />,
     ];
 
-    let content = <Dialog
-                actions={actions}
-                modal={false}
-                bodyStyle={{ backgroundColor: '#262728', color: '#d6d6d6' }}
-                actionsContainerStyle={{ backgroundColor: '#262728', color: '#d6d6d6' }}
-                open={props.openLogin}
-                onRequestClose={props.handleCloseLogin}
-            >
-                <div className="title">
-                    <h3>Welcome, type your name and password to enter.</h3>
-                </div>
-                <div className="input-container">
-                    <input className="input-name" type="text" placeholder="name" value={props.name}
-                        onChange={(event: any) => { props.inputNameHandler(event); }} />
-                    <input className="input-password" type="text" placeholder="password"
-                        value={props.password}
-                        onChange={(event: any) => { props.inputPassHandler(event); }} />
-                </div>
-            </Dialog>;
-    
-    if (props.isLogged) {
+    let content = <div>
+        <div className="title">
+            <h3>Welcome, type your name and password to enter.</h3>
+        </div>
+        <div className="input-container">
+            <input className="input-name" type="text" placeholder="name" value={props.name}
+                onChange={(event: any) => { props.inputNameHandler(event); }} />
+            <input className="input-password" type="text" placeholder="password"
+                value={props.password}
+                onChange={(event: any) => { props.inputPassHandler(event); }} />
+        </div>
+    </div>;
+
+    if (props.loginResult) {
         content = <div>
             <h3>{props.loginResult}</h3>
         </div>;
@@ -50,7 +43,16 @@ const login = (props: any) => {
 
     return (
         <div >
-           {content}
+            <Dialog
+                actions={props.loginResult ? undefined : actions}
+                modal={false}
+                bodyStyle={{ backgroundColor: '#262728', color: '#d6d6d6' }}
+                actionsContainerStyle={{ backgroundColor: '#262728', color: '#d6d6d6' }}
+                open={props.openLogin}
+                onRequestClose={props.handleCloseLogin}
+            >
+                {content}
+            </Dialog>
         </div>
     );
 };

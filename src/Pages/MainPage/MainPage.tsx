@@ -3,13 +3,12 @@ import * as Rx from 'rxjs';
 import axios from 'axios';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-
+import Notification from '../../Components/Notification/Notification';
 import './MainPage.css';
 import * as urlConstants from '../../Constants/UrlConstants';
 import * as action from '../../Actions/Actions';
 import SearchBlock from '../../Components/SearchBlock/SearchBlock';
 import Tracks from '../../Components/Tracks/Tracks';
-
 
 type OwnProps = RouteComponentProps<any>;
 type PropsType = any & any & OwnProps;
@@ -18,6 +17,7 @@ const mapStateToProps = (state: any, ownProps: OwnProps) => ({
   loadedVideos: state.loadedVideos,
   videoId: state.videoId, 
   queryYoutube: state.queryYoutube,
+  isAuth: state.isAuth,
 });
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -35,6 +35,8 @@ class MainPage extends React.Component<PropsType, any> {
     inputValue: '',
     loaded: false,
     searchedTitle: '',
+    notify: '',
+    notifyState: 0,
   };
   onSearch$ = new Rx.Subject();
   subscription: any;
@@ -114,13 +116,12 @@ class MainPage extends React.Component<PropsType, any> {
     this.onSearch$.next(event.target.value);
   }
 
-  addTrackToPlaylist(artistName: string, trackName: string) {
+  addTrackToPlaylist = (artistName: string, trackName: string) => {
     const payload = {
       username: '123',
       songname: trackName,
       artistname: artistName,
     };
-    console.log(payload);
     let token = localStorage.getItem('my-token');
     if (token == null) {
       token = '';
@@ -130,20 +131,34 @@ class MainPage extends React.Component<PropsType, any> {
     };
     axios.post('http://localhost:8000/add-track', payload,  { headers })
       .then((res) => {
-        console.log(res);
+        this.setNotify(trackName + ' added to playlist');
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
+  clearNotify = () => {
+    this.setState({ notify: '' });
+
+  }
+
+  setNotify = (message: any) => {
+    if (this.state.notifyState !== 0) {
+      clearTimeout(this.state.notifyState);
+    }
+    this.setState({ notify: message });
+    const notifyTmeout = setTimeout(this.clearNotify, 1500);
+    this.setState({ notifyState: notifyTmeout });
+    
+  }
+
   render() {
     let tracks = (
       <Tracks tracks={this.state.topTracks} clicked={this.findYoutubeVideo}
-      addTrackToPlaylist={this.addTrackToPlaylist} />
+      addTrackToPlaylist={this.addTrackToPlaylist} isAuth={this.props.isAuth}/>
     );
     if (
-      // this.state.foundTracks &&
       this.state.foundTracks.length > 0 &&
       this.state.inputValue.trim() !== '' &&
       this.state.loaded
@@ -153,6 +168,7 @@ class MainPage extends React.Component<PropsType, any> {
           tracks={this.state.foundTracks}
           clicked={this.findYoutubeVideo}
           addTrackToPlaylist={this.addTrackToPlaylist}
+          isAuth={this.props.isAuth}
         />
       );
     }
@@ -167,6 +183,7 @@ class MainPage extends React.Component<PropsType, any> {
           />
           <div className="tracks">{tracks}</div>
         </div>
+        <Notification notify={this.state.notify}/>
       </div>
     );
   }
@@ -175,3 +192,4 @@ class MainPage extends React.Component<PropsType, any> {
 export default withRouter(
   connect<any, any, OwnProps>(mapStateToProps, mapDispatchToProps)(MainPage),
 );
+

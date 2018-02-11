@@ -1,7 +1,7 @@
 export const LOADEDVIDEO = 'LOADEDVIDEO';
 export const QUERYYOUTUBE = 'QUERYYOUTUBE';
 export const VIDEOID = 'VIDEOID';
-
+export const ISAUTH = 'ISAUTH';
 
 // export const TOPTRACKS = 'TOPTRACKS';
 // export const FOUNDTRACKS = 'FOUNDTRACKS';

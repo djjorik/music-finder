@@ -1,0 +1,21 @@
+.notification {
+    width: 250px;
+    height: 50px;
+    color: white;
+    position: fixed;
+    top: 20px;
+    right: 0;
+    background: #71af95;
+    display: flex;
+    transition: 0.3s ease-in-out;
+    transform: translate3d(0px, 0px, 0px);
+    will-change: transform, opacity;
+    opacity: 1;
+}
+.notification span {
+    margin: auto;
+}
+.hidden {
+    width: 0;
+    opacity: 0;
+}

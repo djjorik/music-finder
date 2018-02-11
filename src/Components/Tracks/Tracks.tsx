@@ -9,6 +9,7 @@ const tracks = (props: any) => {
             return <Track
                 key={index}
                 clicked={props.clicked}
+                isAuth={props.isAuth}
                 addTrackToPlaylist={props.addTrackToPlaylist}
                 artistName={track.artist.name ? track.artist.name : track.artist}
                 listeners={track.listeners}
@@ -18,6 +19,7 @@ const tracks = (props: any) => {
             />;
         });
     }
+
     return (
         <div className="Tracks">
             {tracks}

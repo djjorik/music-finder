@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import { Link } from 'react-router-dom';
 import history from '../Routes/history';
+import * as action from '../Actions/Actions';
 
 const api = 'http://localhost:8000';
 
@@ -22,16 +23,33 @@ class UserPanel extends React.Component<any, any> {
         openRegister: false,
     };
     componentDidMount() {
+        this.checkAuth();
         history.listen((location) => {
-            console.log(location.pathname);
-            console.log(history.location.pathname);
-            // if (location.pathname !== history.location.pathname) {
-                console.log('WTF SYKA');
-                history.location.pathname = location.pathname;
-                this.forceUpdate();
-            // }
+            history.location.pathname = location.pathname;
+            this.forceUpdate();
         });
     }
+
+    checkAuth = () => {
+        let token = localStorage.getItem('my-token');
+        if (token == null) {
+          token = '';
+        }
+        const headers = {
+          Authorization: token,
+        };
+        axios.get(api + '/login-jwt', { headers })
+            .then((res) => {
+                this.props.auth(true);
+            })
+            .catch((err) => {
+                this.setState({
+                    isLogged: false,
+                    loginResult: err,
+                });
+            });
+    }
+
     handleOpenLogin = () => {
         this.setState({
             openLogin: true,
@@ -41,11 +59,11 @@ class UserPanel extends React.Component<any, any> {
     }
 
     handleCloseLogin = () => {
-        console.log('wtf');
         this.setState({
             openLogin: false,
             name: '',
             password: '',
+            loginResult: '',
         });
     }
 
@@ -54,6 +72,7 @@ class UserPanel extends React.Component<any, any> {
             openRegister: true,
             name: '',
             password: '',
+            registerResult: '',
         });
     }
 
@@ -68,7 +87,7 @@ class UserPanel extends React.Component<any, any> {
     }
 
     registerUser = () => {
-        axios.post(api + '/user', {
+        axios.post(api + '/register', {
             username: this.state.name,
             password: this.state.password,
         })
@@ -81,7 +100,10 @@ class UserPanel extends React.Component<any, any> {
 
             })
             .catch((err) => {
-                console.warn(err);
+                this.setState({
+                    isRegistered: false,
+                    registerResult: err,
+                });
             });
     }
 
@@ -91,14 +113,23 @@ class UserPanel extends React.Component<any, any> {
             password: this.state.password,
         })
             .then((res) => {
-                const token = 'Bearer' + res.data.token.slice(3);
-                localStorage.setItem('my-token', token);
-                console.log(localStorage.getItem('my-token'));
-                setTimeout(() => { this.handleCloseLogin(); }, 2000);
-                console.log(res);
+                if (res.data.error) {
+                    this.setState({
+                        isLogged: false,
+                        loginResult: res.data.error,
+                    });
+                } else {
+                    const token = 'Bearer' + res.data.token.slice(3);
+                    localStorage.setItem('my-token', token);
+                    this.props.auth(true);
+                    this.handleCloseLogin();
+                }
             })
             .catch((err) => {
-                console.warn(err);
+                this.setState({
+                    isLogged: false,
+                    loginResult: err,
+                });
             });
     }
 
@@ -114,54 +145,17 @@ class UserPanel extends React.Component<any, any> {
         });
     }
 
-
+    logout = () => {
+        localStorage.clear();
+        this.props.auth(false);
+        history.push('/');
+    }
 
     render() {
         let navButton = null;
-        if (history.location.pathname !== '/playlist') {
-            navButton = <div className="playlist">
-                <Link to="/playlist">
-                    <FlatButton
-                        label="My playlist"
-                        style={{
-                            color: '#d6d6d6',
-                        }}
-                    />
-                </Link>
-            </div>;
-        } else {
-            navButton = <div className="playlist">
-                <Link to="/">
-                    <FlatButton
-                        label="Home"
-                        style={{
-                            color: '#d6d6d6',
-                        }}
-                    />
-                </Link>
-            </div>;
-        }
-        return (
-            <div className="UserPanel">
-                <div className="login">
-                    <FlatButton
-                        label="Login"
-                        style={{
-                            color: '#d6d6d6',
-                        }}
-                        onClick={this.handleOpenLogin}
-                    />
-                </div>
-                <div className="register">
-                    <FlatButton
-                        label="Register"
-                        style={{
-                            color: '#d6d6d6',
-                        }}
-                        onClick={this.handleOpenRegister}
-                    />
-                </div>
-                {/* <div className="playlist">
+        if (this.props.isAuth === true) {
+            if (history.location.pathname !== '/playlist') {
+                navButton = <div className="playlist">
                     <Link to="/playlist">
                         <FlatButton
                             label="My playlist"
@@ -170,8 +164,62 @@ class UserPanel extends React.Component<any, any> {
                             }}
                         />
                     </Link>
-                </div> */}
+                </div>;
+            } else {
+                navButton = <div className="playlist">
+                    <Link to="/">
+                        <FlatButton
+                            label="Home"
+                            style={{
+                                color: '#d6d6d6',
+                            }}
+                        />
+                    </Link>
+                </div>;
+            }
+        }
+        let login = null;
+        let register = null;
+
+        if (this.props.isAuth === false) {
+            login = <div className="login">
+                <FlatButton
+                    label="Login"
+                    style={{
+                        color: '#d6d6d6',
+                    }}
+                    onClick={this.handleOpenLogin}
+                />
+            </div>;
+            register = <div className="register">
+                <FlatButton
+                    label="Register"
+                    style={{
+                        color: '#d6d6d6',
+                    }}
+                    onClick={this.handleOpenRegister}
+                />
+            </div>;
+        }
+        let logout = null;
+        if (this.props.isAuth === true) {
+            logout = <div className="logout">
+                <FlatButton
+                    label="Logout"
+                    style={{
+                        color: '#d6d6d6',
+                    }}
+                    onClick={this.logout}
+                />
+            </div>;
+        }
+
+        return (
+            <div className="UserPanel">
                 {navButton}
+                {login}
+                {register}
+                {logout}
                 <Login handleCloseLogin={this.handleCloseLogin} loginUser={this.loginUser}
                     openLogin={this.state.openLogin}
                     name={this.state.name} password={this.state.password}
@@ -192,9 +240,14 @@ class UserPanel extends React.Component<any, any> {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => ({
-    loadedVideos: state.loadedVideos,
-    videoId: state.videoId,
-    queryYoutube: state.queryYoutube,
+    isAuth: state.isAuth,
 });
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        auth: (payload: any) => {
+            dispatch(action.isAuth(payload));
+        },
+    };
+};
 
-export default connect(mapStateToProps)(UserPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(UserPanel);

@@ -4,9 +4,10 @@ const initialState = {
   loadedVideos: [],
   videoId: '',
   queryYoutube: '',
+  isAuth: false,
 };
 
-const rootReducer = (state: any = initialState, action: any) => {
+export const rootReducer = (state: any = initialState, action: any) => {
   switch (action.type) {
     case actionType.LOADEDVIDEO:
       return { ...state, loadedVideos: action.payload };
@@ -14,9 +15,11 @@ const rootReducer = (state: any = initialState, action: any) => {
       return { ...state, videoId: action.payload };
     case actionType.QUERYYOUTUBE:
       return { ...state, queryYoutube: action.payload };
+    case actionType.ISAUTH:
+      return { ...state, isAuth: action.payload };
     default:
       return state;
   }
 };
 
-export default rootReducer;
+

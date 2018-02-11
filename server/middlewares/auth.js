@@ -15,7 +15,7 @@ passport.use(new LocalStrategy({
         if (user) {
             if (user.checkPassword(password, user.passwordHash)) done(null, user)
             else {
-                done(null, false, { message: 'Incorrect password or name.' })
+                done(null, false, { error: 'Incorrect password or name.' })
             }
         }
     });

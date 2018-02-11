@@ -2,6 +2,13 @@ import * as React from 'react';
 import './Track.css';
 
 const track = (props: any) => {
+    let buttonAdd = null;
+    if (props.isAuth === true) {
+        buttonAdd = <button className="add"
+        onClick={() =>
+            props.addTrackToPlaylist(props.artistName, props.trackName)}></button>;
+    }
+
     return (
         <div className="track" >
             <div className="img-container" >
@@ -17,9 +24,7 @@ const track = (props: any) => {
                 <div className="menu">
                     <button className="play"
                         onClick={() => props.clicked(props.trackName)}></button>
-                    <button className="add"
-                        onClick={() =>
-                            props.addTrackToPlaylist(props.artistName, props.trackName)}></button>
+                    {buttonAdd}
                 </div>
                 <div className="playCount" >
                     <span> Прослушано: {props.playcount} раз</span>

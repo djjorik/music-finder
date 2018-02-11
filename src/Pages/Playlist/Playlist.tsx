@@ -35,7 +35,6 @@ class Playlist extends React.Component<any, any> {
     }
 
     findYoutubeVideo = (q: any) => {
-        console.log(q);
         axios
             .get(urlConstants.YOUTUBE_URL + q + '&type=video&key=' + urlConstants.YOUTUBE_API_KEY)
             .then((res) => {
@@ -43,7 +42,6 @@ class Playlist extends React.Component<any, any> {
                 this.setState({
                     videos: newVideo,
                 });
-                console.log('state  ',this.state.videos);
             })
             .catch((err) => {
                 console.warn(err);
@@ -65,7 +63,6 @@ class Playlist extends React.Component<any, any> {
         axios
         .post(api + '/delete-track', body, { headers })
         .then((res) => {
-            console.log(res);
             this.getPlaylist();
         })
         .catch((err) => {
@@ -74,10 +71,9 @@ class Playlist extends React.Component<any, any> {
     }
 
     render() {
-        
         const playlistTracks = <PlaylistTracks tracks={this.state.tracks}
             findYoutubeVideo={this.findYoutubeVideo} deleteTrack={this.deleteTrack}/>;
-
+            
         const videos = <YoutubeBlock videos={this.state.videos} />;
 
         return (
